@@ -1,3 +1,4 @@
+// Entidade - SUBCLASSE
 public class Arqueiro extends Carta 
 {
 	// contrutor

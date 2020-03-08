@@ -23,7 +23,7 @@ public class Game
 		System.out.println("Carta 2");
 		System.out.println(Carta2.retornarStatus());		
 		
-		while (Carta1.retornaVida() > 0 && Carta2.retornaVida() > 0)
+		while (Carta1.retornarVida() > 0 && Carta2.retornarVida() > 0)
 		{
 
 			System.out.println("");
@@ -32,7 +32,7 @@ public class Game
 			contador++;
 			System.out.println("Partida " + contador + ":");
 			
-			Jogo.Batalha(Carta1, Carta2);
+			Jogo.Batalhar(Carta1, Carta2);
 			
 			System.out.println("");
 			

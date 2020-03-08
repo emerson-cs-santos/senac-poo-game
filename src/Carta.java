@@ -12,12 +12,12 @@ public class Carta
 		this.vida = vida;
 	}
 	
-	public String retornaNome()
+	public String retornarNome()
 	{
 		return this.nome;
 	}
 	
-	public int retornaVida()
+	public int retornarVida()
 	{
 		return this.vida;
 	}

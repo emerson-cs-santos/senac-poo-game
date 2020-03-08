@@ -1,3 +1,4 @@
+// Serviço - SUBCLASSE
 import java.util.Random; 
 
 public class ControleJogo 
@@ -14,7 +15,7 @@ public class ControleJogo
 		this.vencedor = "";
 	}
 	
-	public void Batalha (Carta C1, Carta C2)
+	public void Batalhar (Carta C1, Carta C2)
 	{
 		SortearAtaque();
 		
@@ -23,12 +24,12 @@ public class ControleJogo
 		if (atacante == 1)
 		{
 			C2.receberDano(ataque);
-			this.vencedor = C1.retornaNome();
+			this.vencedor = C1.retornarNome();
 		}
 		else
 		{
 			C1.receberDano(ataque);
-			this.vencedor = C2.retornaNome();
+			this.vencedor = C2.retornarNome();
 		}
 	}
 	
@@ -49,7 +50,6 @@ public class ControleJogo
 		this.ataque = rand.nextInt(10);		
 	}
 	
-	
 	public String ExibirVencedorPartida()
 	{
 		return "Vencedor da partida: " + this.vencedor;
@@ -67,15 +67,15 @@ public class ControleJogo
 		
 		String vencedorJogo = "";
 		
-		if(C1.retornaVida() <= 0)
+		if(C1.retornarVida() <= 0)
 		{
-			vencedorJogo = C2.retornaNome();
+			vencedorJogo = C2.retornarNome();
 		}
-		else if (C2.retornaVida() <= 0)
+		else if (C2.retornarVida() <= 0)
 		{
-			vencedorJogo = C1.retornaNome();
+			vencedorJogo = C1.retornarNome();
 		}
-		else if(C1.retornaVida() == 0 && C2.retornaVida() == 0)
+		else if(C1.retornarVida() == 0 && C2.retornarVida() == 0)
 		{
 			vencedorJogo = "Empate!";
 		}
