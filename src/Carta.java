@@ -5,7 +5,7 @@ public class Carta
 	private String nome;
 	private int vida;
 	
-	// contrutor
+	// Construtor
 	public Carta (String nome, int vida)
 	{
 		this.nome = nome;

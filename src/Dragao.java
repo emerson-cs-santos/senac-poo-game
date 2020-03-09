@@ -8,7 +8,7 @@ public class Dragao extends Carta
 	private int defesa = 2;
 	
 	
-	// contrutor
+	// Construtor
 	public Dragao (String nome, int vida)
 	{
 		super(nome,vida);
