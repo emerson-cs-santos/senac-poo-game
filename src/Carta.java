@@ -1,6 +1,6 @@
 
-// Entidade - SUPERCLASSE
-public class Carta 
+// Entidade - SUPERCLASSE - Definida como abstrada para impedir de ser instanciada, pois ele s[o tem metodos genericos, sem  regras de negocio
+public abstract class Carta 
 {
 	private String nome;
 	private int vida;
