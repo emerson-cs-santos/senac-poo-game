@@ -3,7 +3,7 @@ public class Dragao extends Carta
 {
 	
 	// Atributos da classe dragao, se precisar fazer alguma regra que precise ser guardado algum valor
-	// precisa ser criado aqui, pois não é possivel alterar as propriedades da classe principal
+	// precisa ser criado aqui, pois nï¿½o ï¿½ possivel alterar as propriedades da classe principal
 	
 	private int defesa = 2;
 	
@@ -11,10 +11,8 @@ public class Dragao extends Carta
 	// Construtor
 	public Dragao (String nome, int vida)
 	{
-		super(nome,vida);
-		
-		// Dragao tem vida extra no inicio
-		vida = vida * 2;
+		// Vida do dragao Ã© dobrada
+		super(nome,vida*2);
 	}
 	
 	
