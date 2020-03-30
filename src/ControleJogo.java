@@ -6,17 +6,21 @@ public class ControleJogo
 	
 	private String vencedor;
 	private int ataque;
+	private String desviou;
 	
-	Random rand = new Random(); 
+	Random rand = new Random(); 	
 	
 	// Construtor
 	public ControleJogo ()
 	{
 		this.vencedor = "";
+		this.desviou = "";
 	}
 	
 	public void Batalhar (Carta C1, Carta C2)
 	{
+		this.desviou = "";
+		
 		SortearAtaque();
 		
 		int atacante = DecidirIniciativa();
@@ -25,11 +29,13 @@ public class ControleJogo
 		{
 			C2.receberDano(ataque);
 			this.vencedor = C1.retornarNome();
+			DefinirSeDesviou(C2);
 		}
 		else
 		{
 			C1.receberDano(ataque);
 			this.vencedor = C2.retornarNome();
+			DefinirSeDesviou(C1);
 		}
 	}
 	
@@ -86,6 +92,26 @@ public class ControleJogo
 			
 		return "Vencedor do Jogo: " + vencedorJogo;
 		
-	}	
+	}
+	
+	private void DefinirSeDesviou(Carta C)
+	{
+	
+		if ( C.VerDesviou() )
+		{
+			this.desviou = C.retornarNome() +  " desviou do Ataque!! ";
+		}
+		else
+		{
+			this.desviou = "";
+		}
+		
+		C.SetarDesvio(false);
+	}
+	
+	public String ExibirDesviou()
+	{
+		return this.desviou;
+	}
 
 }

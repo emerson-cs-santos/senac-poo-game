@@ -50,6 +50,7 @@ public class Game
 			
 			System.out.println(Jogo.ExibirVencedorPartida());
 			System.out.println(Jogo.ExibirAtaque());
+			System.out.println(Jogo.ExibirDesviou());
 		}
 		
 		System.out.println("");

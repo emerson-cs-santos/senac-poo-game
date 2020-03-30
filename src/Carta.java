@@ -4,6 +4,7 @@ public abstract class Carta
 {
 	private String nome;
 	private int vida;
+	private boolean desviou = false;
 	
 	// Construtor
 	public Carta (String nome, int vida)
@@ -32,4 +33,14 @@ public abstract class Carta
 		return "Nome: " + this.nome + ", Vida: " + this.vida;
 		
 	}
+	
+	public boolean VerDesviou()
+	{
+		return this.desviou;
+	}		
+	
+	public void SetarDesvio( boolean desviar)
+	{
+		this.desviou = desviar;
+	}	
 }

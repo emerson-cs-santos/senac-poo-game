@@ -1,12 +1,11 @@
 // Entidade - SUBCLASSE
-public class Dragao extends Carta 
+public class Dragao extends Carta implements ISkill
 {
 	
 	// Atributos da classe dragao, se precisar fazer alguma regra que precise ser guardado algum valor
 	// precisa ser criado aqui, pois n�o � possivel alterar as propriedades da classe principal
 	
 	private int defesa = 2;
-	
 	
 	// Construtor
 	public Dragao (String nome, int vida)
@@ -33,6 +32,8 @@ public class Dragao extends Carta
 		return "Defesa: "+ defesa;
 	}
 	
-	
-	
+	@Override
+	public boolean desviar() {
+		return false;
+	}	
 }
