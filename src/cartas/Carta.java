@@ -1,3 +1,4 @@
+package cartas;
 
 // Entidade - SUPERCLASSE - Definida como abstrada para impedir de ser instanciada, pois ele s[o tem metodos genericos, sem  regras de negocio
 public abstract class Carta 

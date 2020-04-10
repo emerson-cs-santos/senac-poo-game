@@ -1,3 +1,6 @@
+package cartas;
+import Jogo.ISkill;
+
 // Entidade - SUBCLASSE
 public class Dragao extends Carta implements ISkill
 {
@@ -19,17 +22,24 @@ public class Dragao extends Carta implements ISkill
 	public void receberDano(int dano)
 	{
 		// Defesa extra do dragao
-		if(dano > defesa)
+		if(dano > this.defesa)
 		{
-			dano = dano - defesa;
+			dano = dano - this.defesa;
 		}
 		
 		super.receberDano(dano);
 	}
 	
-	public String VerDefesa()
+	@Override
+	public String retornarStatus()
 	{
-		return "Defesa: "+ defesa;
+		return super.retornarStatus() + VerDefesa();
+		
+	}
+		
+	private String VerDefesa()
+	{
+		return ", Defesa: " + this.defesa;
 	}
 	
 	@Override

@@ -1,3 +1,4 @@
+package Jogo;
 import java.util.Random; 
 
 public interface ISkill 

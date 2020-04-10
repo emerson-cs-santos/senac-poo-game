@@ -1,3 +1,6 @@
+package cartas;
+import Jogo.ISkill;
+
 // Entidade - SUBCLASSE
 public class Arqueiro extends Carta implements ISkill 
 {
