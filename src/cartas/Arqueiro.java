@@ -17,11 +17,11 @@ public class Arqueiro extends Carta implements ISkill
 		if (!desviar())
 		{
 			super.receberDano(dano);
-			super.SetarDesvio(false);
+			super.setarDesvio(false);
 		}
 		else
 		{
-			super.SetarDesvio(true);
+			super.setarDesvio(true);
 		}
 	}	
 	

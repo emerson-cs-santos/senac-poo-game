@@ -50,32 +50,32 @@ public class ControleJogo
 		this.JogoON = true;
 		this.QuemBatalhou= "";
 		
-		IniciarDecks();
+		iniciarDecks();
 	}
 	
-	public void Batalhar (Carta C1, Carta C2, Jogador jg1, Jogador jg2)
+	public void batalhar (Carta C1, Carta C2, Jogador jg1, Jogador jg2)
 	{
 		this.desviou = "";
 		
-		SortearAtaque();
+		sortearAtaque();
 		
-		int atacante = DecidirIniciativa();
+		int atacante = decidirIniciativa();
 		
 		if (atacante == 1)
 		{
 			C2.receberDano(ataque);
 			this.vencedor = C1.retornarNome() + "(" + jg1.retornarNome() + ")";
-			DefinirSeDesviou(C2,jg2);
+			definirSeDesviou(C2,jg2);
 		}
 		else
 		{
 			C1.receberDano(ataque);
 			this.vencedor = C2.retornarNome() + "(" + jg2.retornarNome() + ")";
-			DefinirSeDesviou(C1,jg1);
+			definirSeDesviou(C1,jg1);
 		}
 	}
 	
-	private int DecidirIniciativa()
+	private int decidirIniciativa()
 	{
 		
 		// Fazer ramdom entre 2 (função está retornando de 0 até 1)
@@ -86,25 +86,25 @@ public class ControleJogo
 		
 	}	
 	
-	private void SortearAtaque()
+	private void sortearAtaque()
 	{
 		// De 1 até 10
 		this.ataque = rand.nextInt(10);		
 	}
 	
-	public String ExibirVencedorPartida()
+	public String exibirVencedorPartida()
 	{
 		return "Vencedor da partida: " + this.vencedor;
 		
 	}
 	
-	public String ExibirAtaque()
+	public String exibirAtaque()
 	{
 		return "Valor do Ataque: " + this.ataque;
 		
 	}	
 	
-	public String VencedorJogo(Jogador J1, Jogador J2)
+	public String vencedorJogo(Jogador J1, Jogador J2)
 	{
 		
 		int VidaCartas1 = 0;
@@ -137,10 +137,10 @@ public class ControleJogo
 		return Vencedor;
 	}
 	
-	private void DefinirSeDesviou(Carta C, Jogador pl)
+	private void definirSeDesviou(Carta C, Jogador pl)
 	{
 	
-		if ( C.VerDesviou() )
+		if ( C.verDesviou() )
 		{
 			this.desviou = C.retornarNome() + "(" + pl.retornarNome() + ")" +  " desviou do Ataque!! ";
 		}
@@ -149,7 +149,7 @@ public class ControleJogo
 			this.desviou = "";
 		}
 		
-		C.SetarDesvio(false);
+		C.setarDesvio(false);
 	}
 	
 	public String ExibirDesviou()
@@ -157,7 +157,7 @@ public class ControleJogo
 		return this.desviou;
 	}
 	
-	private void IniciarDecks()
+	private void iniciarDecks()
 	{
 		int ordem = 0;
 		
@@ -175,13 +175,13 @@ public class ControleJogo
 		this.Cartas.put( ordem++, new Monstro		(	"Lustro Negro",			48	)	);
 		
 		// Deck 1
-		PreencherDeck(this.Deck1, this.Cartas);
+		preencherDeck(this.Deck1, this.Cartas);
 		
 		// Deck 2
-		PreencherDeck(this.Deck2, this.Cartas);
+		preencherDeck(this.Deck2, this.Cartas);
 	}
 	
-	private void PreencherDeck( List<Carta> deck, Map<Integer, Carta> Cartas)
+	private void preencherDeck( List<Carta> deck, Map<Integer, Carta> Cartas)
 	{
 		int Carta_sorteada = 0;
 		int count = 1;
@@ -195,20 +195,20 @@ public class ControleJogo
 		}		
 	}
 	
-	public void ExibirDeck(int DeckNumber)
+	public void exibirDeck(int DeckNumber)
 	{
 		if(DeckNumber == 1)
 		{
-			DeckStatus(this.Deck1);
+			deckStatus(this.Deck1);
 		}
 		
 		if(DeckNumber == 2)
 		{
-			DeckStatus(this.Deck2);
+			deckStatus(this.Deck2);
 		}
 	}
 	
-	private void DeckStatus(List<Carta> deck)
+	private void deckStatus(List<Carta> deck)
 	{
 		System.out.println("");
 		System.out.println("Deck:");
@@ -223,7 +223,7 @@ public class ControleJogo
 	    }
 	}
 
-	public void ControleBatalha(Jogador p1, Jogador p2)
+	public void controleBatalha(Jogador p1, Jogador p2)
 	{
 		boolean OcorreuBatalha = false;
 		for(Carta carta1: this.Deck1)
@@ -234,7 +234,7 @@ public class ControleJogo
 			    {
 					if( carta2.retornarVida() > 0)
 					{
-						Batalhar(carta1, carta2, p1, p2);
+						batalhar(carta1, carta2, p1, p2);
 						OcorreuBatalha = true;
 						this.QuemBatalhou = carta1.retornarNome() + "(" + p1.retornarNome() + ")" +  " VS " + carta2.retornarNome() + "(" + p2.retornarNome() + ")"; 
 						break;
@@ -248,15 +248,14 @@ public class ControleJogo
 		this.JogoON = OcorreuBatalha;
 	}
 	
-	public boolean JogoContinua()
+	public boolean jogoContinua()
 	{
 		return this.JogoON;
 	}
 	
-	public void QuemBatalhouNaPartida()
+	public void quemBatalhouNaPartida()
 	{
 		System.out.println( this.QuemBatalhou );
 	}
-	
 	
 }

@@ -35,12 +35,12 @@ public abstract class Carta
 		
 	}
 	
-	public boolean VerDesviou()
+	public boolean verDesviou()
 	{
 		return this.desviou;
 	}		
 	
-	public void SetarDesvio( boolean desviar)
+	public void setarDesvio( boolean desviar)
 	{
 		this.desviou = desviar;
 	}	

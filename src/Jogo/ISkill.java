@@ -22,7 +22,7 @@ public interface ISkill
 	
 	
 	// AINDA NÃO UTILIZADO, QUANDO FOR, PRECISA INFORMAR NO LOG QUE HOUVE AUMENTO DE VIDA
-	public static int AumentarVida() 
+	public static int aumentarVida() 
 	{
 		
 		int chance = rand.nextInt(3) + 1;

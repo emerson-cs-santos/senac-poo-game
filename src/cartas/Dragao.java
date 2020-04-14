@@ -33,11 +33,11 @@ public class Dragao extends Carta implements ISkill
 	@Override
 	public String retornarStatus()
 	{
-		return super.retornarStatus() + VerDefesa();
+		return super.retornarStatus() + verDefesa();
 		
 	}
 		
-	private String VerDefesa()
+	private String verDefesa()
 	{
 		return ", Defesa: " + this.defesa;
 	}

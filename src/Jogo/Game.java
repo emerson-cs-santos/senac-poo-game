@@ -5,10 +5,10 @@ public class Game
 	
 	public static void main(String[] args) 
 	{
-		Jogador Player1 = new Jogador("Kaiba");
-		Jogador Player2 = new Jogador("Yugi");
+		Jogador player1 = new Jogador("Kaiba");
+		Jogador player2 = new Jogador("Yugi");
 		
-		ControleJogo Jogo = new ControleJogo();
+		ControleJogo jogo = new ControleJogo();
 		
 		int contador = 1;
 		
@@ -16,19 +16,19 @@ public class Game
 		System.out.println("--------------------------------------------------------------------------------");
 		System.out.println("Statul Inicial:");
 		
-		while ( Jogo.JogoContinua() )
+		while ( jogo.jogoContinua() )
 		{			
 			//System.out.println("");
 			
-			System.out.println("Status Jogador 1: " + Player1.retornarNome());
-			Jogo.ExibirDeck(1);
+			System.out.println("Status Jogador 1: " + player1.retornarNome());
+			jogo.exibirDeck(1);
 			
 			System.out.println("");
 			
-			System.out.println("Status Jogador 2: " + Player2.retornarNome());
-			Jogo.ExibirDeck(2);
+			System.out.println("Status Jogador 2: " + player2.retornarNome());
+			jogo.exibirDeck(2);
 			
-			Jogo.ControleBatalha(Player1, Player2);
+			jogo.controleBatalha(player1, player2);
 			
 			System.out.println("");
 			System.out.println("--------------------------------------------------------------------------------");
@@ -36,10 +36,10 @@ public class Game
 			System.out.println("--------------------------------------------------------------------------------");
 			System.out.println("");
 			
-			Jogo.QuemBatalhouNaPartida();
-			System.out.println(Jogo.ExibirVencedorPartida());
-			System.out.println(Jogo.ExibirAtaque());
-			System.out.println(Jogo.ExibirDesviou());
+			jogo.quemBatalhouNaPartida();
+			System.out.println(jogo.exibirVencedorPartida());
+			System.out.println(jogo.exibirAtaque());
+			System.out.println(jogo.ExibirDesviou());
 			
 			System.out.println("");
 		}
@@ -49,18 +49,18 @@ public class Game
 		System.out.println("--------------------------------------------------------------------------------");
 		System.out.println("");
 		
-		System.out.println("Status Jogador 1: " + Player1.retornarNome());
-		Jogo.ExibirDeck(1);
+		System.out.println("Status Jogador 1: " + player1.retornarNome());
+		jogo.exibirDeck(1);
 		
 		System.out.println("");
 		
-		System.out.println("Status Jogador 2: " + Player2.retornarNome());
-		Jogo.ExibirDeck(2);		
+		System.out.println("Status Jogador 2: " + player2.retornarNome());
+		jogo.exibirDeck(2);		
 		
 		System.out.println("");
 		System.out.println("--------------------------------------------------------------------------------");
 		System.out.println("--------------------------------------------------------------------------------");
 	
-		System.out.println( Jogo.VencedorJogo(Player1, Player2) + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		System.out.println( jogo.vencedorJogo(player1, player2) + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 	}
 }
