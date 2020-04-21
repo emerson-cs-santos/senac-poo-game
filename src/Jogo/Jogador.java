@@ -1,13 +1,18 @@
 package Jogo;
+import java.util.Scanner;
 
 public class Jogador 
 {
 	private String nome;
 	
 	// Construtor
-	public Jogador (String nome)
+	public Jogador (int numJogador)
 	{
-		this.nome = nome;
+		Scanner input = new Scanner(System.in);
+		System.out.println("Digite o nome do jogador " + numJogador + ":");
+		
+		String nomeJogador = input.nextLine();
+		this.nome = nomeJogador;
 	}	
 	
 	public String retornarNome()

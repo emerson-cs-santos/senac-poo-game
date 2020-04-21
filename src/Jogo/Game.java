@@ -5,10 +5,15 @@ public class Game
 	
 	public static void main(String[] args) 
 	{
-		Jogador player1 = new Jogador("Kaiba");
-		Jogador player2 = new Jogador("Yugi");
+		Jogador player1 = new Jogador(1);
+		System.out.println("");
+		Jogador player2 = new Jogador(2);
 		
 		ControleJogo jogo = new ControleJogo();
+		jogo.iniciarDeck(player1, 1);
+		jogo.iniciarDeck(player2, 2);
+		
+		jogo.continuarJogo();
 		
 		int contador = 1;
 		
@@ -27,6 +32,8 @@ public class Game
 			
 			System.out.println("Status Jogador 2: " + player2.retornarNome());
 			jogo.exibirDeck(2);
+
+			jogo.continuarJogo();
 			
 			jogo.controleBatalha(player1, player2);
 			

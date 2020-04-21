@@ -9,6 +9,7 @@ import java.util.Map;
 //import java.util.Set;
 //import java.util.HashSet;
 import java.util.Random;
+import java.util.Scanner;
 
 import cartas.Arqueiro;
 import cartas.Bruxa;
@@ -31,16 +32,16 @@ public class ControleJogo
 	private String desviou;
 	private boolean JogoON;
 	private String QuemBatalhou;
+	private boolean jogoAuto= false;
 	
 	private List<Carta> Deck1 = new ArrayList<Carta>();
 	private List<Carta> Deck2 = new ArrayList<Carta>();
 	
 	private Map<Integer, Carta> Cartas = new HashMap<Integer, Carta>();	
 	
-//	Object Carta1 = new Object();
-//	Object Carta2 = new Object();
-	
 	Random rand = new Random(); 	
+	
+	Scanner input = new Scanner(System.in);	
 	
 	// Construtor
 	public ControleJogo ()
@@ -50,8 +51,39 @@ public class ControleJogo
 		this.JogoON = true;
 		this.QuemBatalhou= "";
 		
-		iniciarDecks();
+		criarCartas();
+		definirJogoAuto();
 	}
+	
+	private void definirJogoAuto()
+	{
+		// DECIDIR SE JOGO SERÁ RODADO DE UMA VEZ OU SERÁ EXECUTADO CADA PARTIDA CONFORME USUARIO QUISER
+		boolean modoRespostaOk = false;
+		
+		String modo = "";
+	
+		while ( !modoRespostaOk )
+		{
+			System.out.println("\nDeseja modo automático de execução das partidas do jogo?");
+			System.out.println("Digite s para Sim ou n para Não");
+			modo = this.input.nextLine();
+			
+			if ( modo.toUpperCase().contentEquals("S") )
+			{
+				this.jogoAuto = true;
+				modoRespostaOk = true;
+			}
+			else if (modo.toUpperCase().contentEquals("N"))
+			{
+				modoRespostaOk = true;
+			}
+			else
+			{
+				System.out.println("\nOpção incorreta! Digite 's' ou 'n'.");
+			}
+		}		
+	}
+	
 	
 	public void batalhar (Carta C1, Carta C2, Jogador jg1, Jogador jg2)
 	{
@@ -75,6 +107,7 @@ public class ControleJogo
 		}
 	}
 	
+	
 	private int decidirIniciativa()
 	{
 		
@@ -86,11 +119,13 @@ public class ControleJogo
 		
 	}	
 	
+	
 	private void sortearAtaque()
 	{
 		// De 1 até 10
 		this.ataque = rand.nextInt(10);		
 	}
+	
 	
 	public String exibirVencedorPartida()
 	{
@@ -98,11 +133,13 @@ public class ControleJogo
 		
 	}
 	
+	
 	public String exibirAtaque()
 	{
 		return "Valor do Ataque: " + this.ataque;
 		
 	}	
+	
 	
 	public String vencedorJogo(Jogador J1, Jogador J2)
 	{
@@ -137,6 +174,7 @@ public class ControleJogo
 		return Vencedor;
 	}
 	
+	
 	private void definirSeDesviou(Carta C, Jogador pl)
 	{
 	
@@ -152,12 +190,14 @@ public class ControleJogo
 		C.setarDesvio(false);
 	}
 	
+	
 	public String ExibirDesviou()
 	{
 		return this.desviou;
 	}
 	
-	private void iniciarDecks()
+	
+	private void criarCartas()
 	{
 		int ordem = 0;
 		
@@ -175,13 +215,96 @@ public class ControleJogo
 		this.Cartas.put( ordem++, new Monstro		(	"Lustro Negro",			48	)	);
 		
 		// Deck 1
-		preencherDeck(this.Deck1, this.Cartas);
+		//preencherDeck(this.Deck1, this.Cartas);
 		
 		// Deck 2
-		preencherDeck(this.Deck2, this.Cartas);
+		//preencherDeck(this.Deck2, this.Cartas);
 	}
 	
-	private void preencherDeck( List<Carta> deck, Map<Integer, Carta> Cartas)
+	
+	public void iniciarDeck( Jogador player, int jogadorNumber )
+	{
+		// DEFININDO O TAMANHO DO DECK
+		int deckQtd = 3;
+		
+		// DECIDIR SE VAI USAR DECK RANDOM
+		boolean modoRespostaOk = false;
+		boolean randDeck= false;
+		String modo = "";
+	
+		while ( !modoRespostaOk )
+		{
+			System.out.println("\n" + player.retornarNome() + " deseja utilizar cartas aleatórias?");
+			System.out.println("Digite s para Sim ou n para Não");
+			modo = this.input.nextLine();
+			
+			if ( modo.toUpperCase().contentEquals("S") )
+			{
+				randDeck = true;
+				modoRespostaOk = true;
+			}
+			else if (modo.toUpperCase().contentEquals("N"))
+			{
+				modoRespostaOk = true;
+			}
+			else
+			{
+				System.out.println("\nOpção incorreta! Digite 's' ou 'n'.");
+			}
+		}
+		
+		
+		if (randDeck)
+		{
+			preencherDeckRandom( deckJogador(jogadorNumber) );
+			// EXIBE DECK QUE ESTÁ SENDO MONTADO
+			deckList( deckJogador(jogadorNumber) );				
+		}
+		else
+		{
+			int opcaoCarta = 0;
+			int count = 1;
+			
+			System.out.println("\n" + player.retornarNome() + " escolha " + deckQtd + " cartas:");
+		    
+			for(int indice: this.Cartas.keySet())
+		    {
+		      System.out.println( "Carta " + indice + " : " + this.Cartas.get(indice).retornarNome() );
+		    }
+			
+			System.out.println("");
+			
+			String deckResp = "";
+			
+			while(count < deckQtd+1)
+			{				
+				System.out.println("Carta " + count + ":");
+				System.out.println("Digite o número da carta para escolher:");
+				opcaoCarta = this.input.nextInt();
+				
+				if ( opcaoCarta > this.Cartas.size()-1 || opcaoCarta < 0 )
+				{
+					System.out.println("\nOpção inválida! Digite um número de uma carta conforme a lista.\n");
+				}
+				else
+				{
+					deckAdd( deckJogador(jogadorNumber), opcaoCarta);
+					count++;
+				}
+				// EXIBE DECK QUE ESTÁ SENDO MONTADO
+				deckList( deckJogador(jogadorNumber) );					
+			}			
+		}
+	}
+	
+	
+	private void deckAdd( List<Carta> deck, int cartaNumber)
+	{
+		deck.add( this.Cartas.get(cartaNumber) );		
+	}
+	
+	
+	private void preencherDeckRandom( List<Carta> deck )
 	{
 		int Carta_sorteada = 0;
 		int count = 1;
@@ -191,9 +314,40 @@ public class ControleJogo
 			// De 1 até 12
 			Carta_sorteada = rand.nextInt(12);
 			
-			deck.add( Cartas.get(Carta_sorteada) );
+			deck.add( this.Cartas.get(Carta_sorteada) );
 		}		
 	}
+	
+	
+	private void deckList(List<Carta> deck)
+	{
+		// Valida o tamanho para não mostrar enquanto não tiver cartas
+		if (deck.size() > 0)
+		{
+			System.out.println("\nCartas no Deck:");
+			
+			int CartaCount = 1;
+			
+			for(Carta carta: deck)
+		    {
+				System.out.println(CartaCount++ + " - " + carta.retornarNome() );
+		    }
+		}
+	}
+	
+	
+	private List<Carta> deckJogador (int jogadorNumber)
+	{
+		if (jogadorNumber == 1)
+		{
+			return this.Deck1;
+		}
+		else
+		{
+			return this.Deck2;
+		}
+	}
+	
 	
 	public void exibirDeck(int DeckNumber)
 	{
@@ -207,6 +361,7 @@ public class ControleJogo
 			deckStatus(this.Deck2);
 		}
 	}
+	
 	
 	private void deckStatus(List<Carta> deck)
 	{
@@ -222,7 +377,8 @@ public class ControleJogo
 	        System.out.println("");
 	    }
 	}
-
+	
+	
 	public void controleBatalha(Jogador p1, Jogador p2)
 	{
 		boolean OcorreuBatalha = false;
@@ -248,14 +404,27 @@ public class ControleJogo
 		this.JogoON = OcorreuBatalha;
 	}
 	
+	
 	public boolean jogoContinua()
 	{
 		return this.JogoON;
 	}
 	
+	
 	public void quemBatalhouNaPartida()
 	{
 		System.out.println( this.QuemBatalhou );
 	}
+	
+	
+	public void continuarJogo()
+	{
+		if ( !this.jogoAuto )
+		{
+			System.out.println("\nAperte qualquer tecla para continar...");
+			String partida = this.input.nextLine();				
+		}
+	}
+	
 	
 }
