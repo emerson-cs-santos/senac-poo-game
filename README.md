@@ -30,7 +30,7 @@ Jogo de cartas para 2 jogadores.
 
 #### Diagrama de Classe
 ![Diagrama de Classe](https://github.com/emerson-cs-santos/senac-poo-game/blob/master/src/images/Diagrama_de_classe.png "Diagrama de Classe")
-Existe um atributo adicional que é uma lista do tipo efeitos que cada carta pode ter.
+Existe um atributo adicional na classe de Carta que é uma lista do tipo efeitos que cada carta pode ter.
 
 #### Diagrama de Sequência
 ![Diagrama de Sequência](https://github.com/emerson-cs-santos/senac-poo-game/blob/master/src/images/Diagrama%20de%20sequencia.png "Diagrama de Sequência")
