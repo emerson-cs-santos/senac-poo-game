@@ -16,6 +16,7 @@ import cartas.Bruxa;
 import cartas.Demonio;
 import cartas.Dinossauro;
 import cartas.Dragao;
+import cartas.Efeito;
 import cartas.Elfo;
 import cartas.Esqueleto;
 import cartas.Fantasma;
@@ -27,6 +28,7 @@ import cartas.Monstro;
 public class ControleJogo 
 {
 	private int ataque;
+	private int ataqueOriginal;
 	
 	private String vencedor;
 	private String desviou;
@@ -93,15 +95,59 @@ public class ControleJogo
 		
 		int atacante = decidirIniciativa();
 		
+		// Aplicando efeitos no valor do ataque
+		List<Efeito> efeitosC1 = C1.getEfeitos();
+		List<Efeito> efeitosC2 = C2.getEfeitos();
+		
+		System.out.println("Efeitos das Cartas para essa partida:");
+		
+		System.out.println(C1.retornarNome());
+		for(Efeito Efeito: efeitosC1)
+	    {
+			Efeito.verEfeito();
+	    }
+		
+		System.out.println("");
+		System.out.println(C2.retornarNome());
+		for(Efeito Efeito: efeitosC2)
+	    {
+			Efeito.verEfeito();
+	    }		
+		
+		
 		if (atacante == 1)
 		{
-			C2.receberDano(ataque);
+			// Efeitos quando carta 1 ataca
+			for(Efeito Efeito: efeitosC1)
+		    {
+				this.ataque = Efeito.aplicarEfeito(this.ataque, true);
+		    }
+			
+			// Efeitos quando carta 2 defende
+			for(Efeito Efeito: efeitosC2)
+		    {
+				this.ataque = Efeito.aplicarEfeito(this.ataque, false);
+		    }			
+			
+			C2.receberDano(this.ataque);
 			this.vencedor = C1.retornarNome() + "(" + jg1.retornarNome() + ")";
 			definirSeDesviou(C2,jg2);
 		}
 		else
 		{
-			C1.receberDano(ataque);
+			// Efeitos quando carta 2 ataca
+			for(Efeito Efeito: efeitosC2)
+		    {
+				this.ataque = Efeito.aplicarEfeito(this.ataque, true);
+		    }
+			
+			// Efeitos quando carta 1 defende
+			for(Efeito Efeito: efeitosC1)
+		    {
+				this.ataque = Efeito.aplicarEfeito(this.ataque, false);
+		    }				
+			
+			C1.receberDano(this.ataque);
 			this.vencedor = C2.retornarNome() + "(" + jg2.retornarNome() + ")";
 			definirSeDesviou(C1,jg1);
 		}
@@ -123,7 +169,9 @@ public class ControleJogo
 	private void sortearAtaque()
 	{
 		// De 1 até 10
-		this.ataque = rand.nextInt(10);		
+		this.ataque = rand.nextInt(10);
+		
+		this.ataqueOriginal = this.ataque; 
 	}
 	
 	
@@ -139,6 +187,12 @@ public class ControleJogo
 		return "Valor do Ataque: " + this.ataque;
 		
 	}	
+	
+	public int exbirAtaqueOriginal()
+	{
+		return this.ataqueOriginal;
+		
+	}		
 	
 	
 	public String vencedorJogo(Jogador J1, Jogador J2)

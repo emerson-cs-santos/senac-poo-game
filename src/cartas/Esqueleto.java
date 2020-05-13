@@ -6,6 +6,8 @@ public class Esqueleto extends Carta
 	public Esqueleto (String nome, int vida)
 	{	
 		super(nome,vida);
+		
+		aplicarEfeito("Escudo", 4, 1);
 	}		
 
 }

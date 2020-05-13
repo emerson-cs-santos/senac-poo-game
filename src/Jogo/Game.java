@@ -45,6 +45,7 @@ public class Game
 			
 			jogo.quemBatalhouNaPartida();
 			System.out.println(jogo.exibirVencedorPartida());
+			System.out.println("Ataque original: " + jogo.exbirAtaqueOriginal() );
 			System.out.println(jogo.exibirAtaque());
 			System.out.println(jogo.ExibirDesviou());
 			
