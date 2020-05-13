@@ -12,6 +12,12 @@ public class Jogador
 		System.out.println("Digite o nome do jogador " + numJogador + ":");
 		
 		String nomeJogador = input.nextLine();
+		
+		if (nomeJogador.isEmpty())
+		{
+			nomeJogador = "Jogador " + numJogador;
+		}
+		
 		this.nome = nomeJogador;
 	}	
 	
