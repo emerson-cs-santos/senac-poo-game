@@ -1,49 +1,34 @@
 package cartas;
-import Jogo.ISkill;
+
+import Jogo.Tipo;
 
 // Entidade - SUBCLASSE
-public class Dragao extends Carta implements ISkill
+public class Dragao extends Fusao implements IDefesaExtra
 {
-	
 	// Atributos da classe dragao, se precisar fazer alguma regra que precise ser guardado algum valor
 	// precisa ser criado aqui, pois nï¿½o ï¿½ possivel alterar as propriedades da classe principal
 	
-	private int defesa = 2;
+	private int defesa = 10;
 	
 	// Construtor
-	public Dragao (String nome, int vida)
+	public Dragao (String nome, int vida, int ataque, int defesa, Tipo tipo)
 	{
 		// Vida do dragao Ã© dobrada
-		super(nome,vida*2);
+		super(nome ,vida*2, ataque, defesa, tipo);
 	}
 	
 	
 	@Override
-	public void receberDano(int dano)
+	public int retornarDefesa()
 	{
-		// Defesa extra do dragao
-		if(dano > this.defesa)
-		{
-			dano = dano - this.defesa;
-		}
-		
-		super.receberDano(dano);
+		System.out.println(this.retornarNome() + " Tem " + this.defesa + " de defesa adicionais por ser Dragão!");
+		return super.retornarDefesa() + aumentarDefesa() ;
 	}
 	
-	@Override
-	public String retornarStatus()
+	
+	public int aumentarDefesa()
 	{
-		return super.retornarStatus() + verDefesa();
-		
-	}
-		
-	private String verDefesa()
-	{
-		return ", Defesa: " + this.defesa;
+		return this.defesa;
 	}
 	
-	@Override
-	public boolean desviar() {
-		return false;
-	}	
 }

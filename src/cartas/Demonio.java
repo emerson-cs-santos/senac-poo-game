@@ -1,10 +1,12 @@
 package cartas;
 
-public class Demonio extends Carta
+import Jogo.Tipo;
+
+public class Demonio extends Ritual
 {
-	public Demonio (String nome, int vida)
+	public Demonio (String nome, int vida, int ataque, int defesa, Tipo tipo, int curseValor)
 	{	
-		super(nome,vida);
+		super(nome ,vida, ataque, defesa, tipo, curseValor);
 	}	
 
 }

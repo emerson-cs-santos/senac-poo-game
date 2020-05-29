@@ -1,11 +1,13 @@
 package cartas;
 
-public class Mago extends Carta
+import Jogo.Tipo;
+
+public class Mago extends Ritual
 {
 	// Construtor
-	public Mago (String nome, int vida)
+	public Mago ( String nome, int vida, int ataque, int defesa, Tipo tipo, int curseValor )
 	{
-		super(nome,vida+10);
+		super(nome ,vida, ataque, defesa, tipo, curseValor);
 	}
 
 }

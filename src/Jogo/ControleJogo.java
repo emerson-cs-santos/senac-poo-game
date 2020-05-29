@@ -2,483 +2,351 @@ package Jogo;
 // Serviço
 
 import cartas.Carta;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-//import java.util.Set;
-//import java.util.HashSet;
 import java.util.Random;
 import java.util.Scanner;
 
-import cartas.Arqueiro;
-import cartas.Bruxa;
-import cartas.Demonio;
-import cartas.Dinossauro;
-import cartas.Dragao;
-import cartas.Efeito;
-import cartas.Elfo;
-import cartas.Esqueleto;
-import cartas.Fantasma;
-import cartas.FeraDivina;
-import cartas.Harpia;
-import cartas.Mago;
-import cartas.Monstro;
+import efeitos.Efeito;
+import efeitos.TipoEfeito;
 
 public class ControleJogo 
 {
-	private int ataque;
-	private int ataqueOriginal;
-	
-	private String vencedor;
-	private String desviou;
-	private boolean JogoON;
-	private String QuemBatalhou;
-	private boolean jogoAuto= false;
-	
-	private List<Carta> Deck1 = new ArrayList<Carta>();
-	private List<Carta> Deck2 = new ArrayList<Carta>();
-	
-	private Map<Integer, Carta> Cartas = new HashMap<Integer, Carta>();	
-	
-	Random rand = new Random(); 	
-	
+	Random rand = new Random();
 	Scanner input = new Scanner(System.in);	
 	
+	Deck deck1;
+	Deck deck2;
+	
 	// Construtor
-	public ControleJogo ()
+	public ControleJogo ( Deck deck1, Deck deck2 )
 	{
-		this.vencedor = "";
-		this.desviou = "";
-		this.JogoON = true;
-		this.QuemBatalhou= "";
+		this.deck1 = deck1;
+		this.deck2 = deck2;
 		
-		criarCartas();
-		definirJogoAuto();
+		jogo();
 	}
 	
-	private void definirJogoAuto()
+	private void jogo()
 	{
-		// DECIDIR SE JOGO SERÁ RODADO DE UMA VEZ OU SERÁ EXECUTADO CADA PARTIDA CONFORME USUARIO QUISER
-		boolean modoRespostaOk = false;
+		int opcaoCarta1 = 0;
+		int opcaoCarta2 = 0;
+		int resultadoBatalha = 0;
+		int indice = 0;
+		Carta card1;
+		Carta card2;
 		
-		String modo = "";
-	
-		while ( !modoRespostaOk )
+		while( this.deck1.retornarDeck().size() > 0 && this.deck2.retornarDeck().size() > 0 )
 		{
-			System.out.println("\nDeseja modo automático de execução das partidas do jogo?");
-			System.out.println("Digite s para Sim ou n para Não");
-			modo = this.input.nextLine();
+			// Jogadores escolhem 1 carta para a batalha
+			System.out.println(this.deck1.player.retornarNome() +  ", escolha uma carta para batalha:");
+			System.out.println("Digite o número da carta para escolhê-la.");
 			
-			if ( modo.toUpperCase().contentEquals("S") )
+			indice = 0;
+			for( Carta carta: this.deck1.retornarDeck() )
+		    {
+				System.out.println( "\nCarta " + indice + " : " + carta.retornarNome() );
+				System.out.println( carta.retornarDesc() );
+				carta.verEfeitos();
+				indice++;
+		    }
+			
+			opcaoCarta1 = this.input.nextInt();
+			
+			if ( opcaoCarta1 > this.deck1.retornarDeck().size()-1 || opcaoCarta1 < 0 )
 			{
-				this.jogoAuto = true;
-				modoRespostaOk = true;
-			}
-			else if (modo.toUpperCase().contentEquals("N"))
-			{
-				modoRespostaOk = true;
+				System.out.println("\nOpção inválida! Digite um número de uma carta conforme a lista.\n");
 			}
 			else
 			{
-				System.out.println("\nOpção incorreta! Digite 's' ou 'n'.");
-			}
-		}		
-	}
-	
-	
-	public void batalhar (Carta C1, Carta C2, Jogador jg1, Jogador jg2)
-	{
-		this.desviou = "";
-		
-		sortearAtaque();
-		
-		int atacante = decidirIniciativa();
-		
-		// Aplicando efeitos no valor do ataque
-		List<Efeito> efeitosC1 = C1.getEfeitos();
-		List<Efeito> efeitosC2 = C2.getEfeitos();
-		
-		System.out.println("Efeitos das Cartas para essa partida:");
-		
-		System.out.println(C1.retornarNome());
-		for(Efeito Efeito: efeitosC1)
-	    {
-			Efeito.verEfeito();
-	    }
-		
-		System.out.println("");
-		System.out.println(C2.retornarNome());
-		for(Efeito Efeito: efeitosC2)
-	    {
-			Efeito.verEfeito();
-	    }		
-		
-		
-		if (atacante == 1)
-		{
-			// Efeitos quando carta 1 ataca
-			for(Efeito Efeito: efeitosC1)
-		    {
-				this.ataque = Efeito.aplicarEfeito(this.ataque, true);
-		    }
-			
-			// Efeitos quando carta 2 defende
-			for(Efeito Efeito: efeitosC2)
-		    {
-				this.ataque = Efeito.aplicarEfeito(this.ataque, false);
-		    }			
-			
-			C2.receberDano(this.ataque);
-			this.vencedor = C1.retornarNome() + "(" + jg1.retornarNome() + ")";
-			definirSeDesviou(C2,jg2);
-		}
-		else
-		{
-			// Efeitos quando carta 2 ataca
-			for(Efeito Efeito: efeitosC2)
-		    {
-				this.ataque = Efeito.aplicarEfeito(this.ataque, true);
-		    }
-			
-			// Efeitos quando carta 1 defende
-			for(Efeito Efeito: efeitosC1)
-		    {
-				this.ataque = Efeito.aplicarEfeito(this.ataque, false);
-		    }				
-			
-			C1.receberDano(this.ataque);
-			this.vencedor = C2.retornarNome() + "(" + jg2.retornarNome() + ")";
-			definirSeDesviou(C1,jg1);
-		}
-	}
-	
-	
-	private int decidirIniciativa()
-	{
-		
-		// Fazer ramdom entre 2 (função está retornando de 0 até 1)
-		// Se ramdom retornar 0, será somado com 1, sorteando assim o numero 1
-		// Se ramdom retornar 1, será somado com 1, sorteando assim o numero 2
-		
-		return rand.nextInt(2) + 1;
-		
-	}	
-	
-	
-	private void sortearAtaque()
-	{
-		// De 1 até 10
-		this.ataque = rand.nextInt(10);
-		
-		this.ataqueOriginal = this.ataque; 
-	}
-	
-	
-	public String exibirVencedorPartida()
-	{
-		return "Vencedor da partida: " + this.vencedor;
-		
-	}
-	
-	
-	public String exibirAtaque()
-	{
-		return "Valor do Ataque: " + this.ataque;
-		
-	}	
-	
-	public int exbirAtaqueOriginal()
-	{
-		return this.ataqueOriginal;
-		
-	}		
-	
-	
-	public String vencedorJogo(Jogador J1, Jogador J2)
-	{
-		
-		int VidaCartas1 = 0;
-		int VidaCartas2 = 0;
-		
-		for(Carta carta1: this.Deck1)
-	    {
-			VidaCartas1 = VidaCartas1 + carta1.retornarVida();
-	    }	
-		
-		for(Carta carta2: this.Deck2)
-	    {
-			VidaCartas2 = VidaCartas2 + carta2.retornarVida();
-	    }		
-		
-		
-		String Vencedor = "";
-		
-		if (VidaCartas1 <= 0)
-		{
-			Vencedor = "Vencedor Jogador 2: " + J2.retornarNome();
-		}
-		
-		if (VidaCartas2 <= 0)
-		{
-			Vencedor = "Vencedor Jogador 1: " + J1.retornarNome();
-		}	
-		
-		
-		return Vencedor;
-	}
-	
-	
-	private void definirSeDesviou(Carta C, Jogador pl)
-	{
-	
-		if ( C.verDesviou() )
-		{
-			this.desviou = C.retornarNome() + "(" + pl.retornarNome() + ")" +  " desviou do Ataque!! ";
-		}
-		else
-		{
-			this.desviou = "";
-		}
-		
-		C.setarDesvio(false);
-	}
-	
-	
-	public String ExibirDesviou()
-	{
-		return this.desviou;
-	}
-	
-	
-	private void criarCartas()
-	{
-		int ordem = 0;
-		
-		this.Cartas.put( ordem++, new Arqueiro		(	"Legolas",				10	)	);
-		this.Cartas.put( ordem++, new Bruxa			(	"Floresta Negra",		15	)	);
-		this.Cartas.put( ordem++, new Demonio		(	"Rei Caveira",			28	)	);
-		this.Cartas.put( ordem++, new Dinossauro	(	"Rex de duas cabeças",	60	)	);
-		this.Cartas.put( ordem++, new Dragao		(	"Blue-eyes",			30	)	);
-		this.Cartas.put( ordem++, new Elfo			(	"Elfa Mística",			5	)	);
-		this.Cartas.put( ordem++, new Esqueleto		(	"Guardião dos portões",	75	)	);
-		this.Cartas.put( ordem++, new Fantasma		(	"Fantasma Renegado",	36	)	);
-		this.Cartas.put( ordem++, new FeraDivina	(	"Alado de Rá",			200	)	);
-		this.Cartas.put( ordem++, new Harpia		(	"Espanador de penas",	20	)	);
-		this.Cartas.put( ordem++, new Mago			(	"Mago Negro",			25	)	);
-		this.Cartas.put( ordem++, new Monstro		(	"Lustro Negro",			48	)	);
-		
-		// Deck 1
-		//preencherDeck(this.Deck1, this.Cartas);
-		
-		// Deck 2
-		//preencherDeck(this.Deck2, this.Cartas);
-	}
-	
-	
-	public void iniciarDeck( Jogador player, int jogadorNumber )
-	{
-		// DEFININDO O TAMANHO DO DECK
-		int deckQtd = 3;
-		
-		// DECIDIR SE VAI USAR DECK RANDOM
-		boolean modoRespostaOk = false;
-		boolean randDeck= false;
-		String modo = "";
-	
-		while ( !modoRespostaOk )
-		{
-			System.out.println("\n" + player.retornarNome() + " deseja utilizar cartas aleatórias?");
-			System.out.println("Digite s para Sim ou n para Não");
-			modo = this.input.nextLine();
-			
-			if ( modo.toUpperCase().contentEquals("S") )
-			{
-				randDeck = true;
-				modoRespostaOk = true;
-			}
-			else if (modo.toUpperCase().contentEquals("N"))
-			{
-				modoRespostaOk = true;
-			}
-			else
-			{
-				System.out.println("\nOpção incorreta! Digite 's' ou 'n'.");
-			}
-		}
-		
-		
-		if (randDeck)
-		{
-			preencherDeckRandom( deckJogador(jogadorNumber) );
-			// EXIBE DECK QUE ESTÁ SENDO MONTADO
-			deckList( deckJogador(jogadorNumber) );				
-		}
-		else
-		{
-			int opcaoCarta = 0;
-			int count = 1;
-			
-			System.out.println("\n" + player.retornarNome() + " escolha " + deckQtd + " cartas:");
-		    
-			for(int indice: this.Cartas.keySet())
-		    {
-		      System.out.println( "Carta " + indice + " : " + this.Cartas.get(indice).retornarNome() );
-		    }
-			
-			System.out.println("");
-			
-			String deckResp = "";
-			
-			while(count < deckQtd+1)
-			{				
-				System.out.println("Carta " + count + ":");
-				System.out.println("Digite o número da carta para escolher:");
-				opcaoCarta = this.input.nextInt();
+				card1 = this.deck1.retornarDeck().get(opcaoCarta1);
+				System.out.println("Carta escolhida: " + card1.retornarNome() + "\n");
 				
-				if ( opcaoCarta > this.Cartas.size()-1 || opcaoCarta < 0 )
+				
+				System.out.println(this.deck2.player.retornarNome() +  ", escolha uma carta para batalha:");
+				System.out.println("Digite o número da carta para escolhê-la.");
+				
+				indice = 0;
+				for( Carta carta: this.deck2.retornarDeck() )
+			    {
+					System.out.println( "\nCarta " + indice + " : " + carta.retornarNome() );
+					System.out.println( carta.retornarDesc() );
+					carta.verEfeitos();
+					indice++;
+			    }	
+				
+				opcaoCarta2 = this.input.nextInt();
+				
+				if ( opcaoCarta2 > this.deck2.retornarDeck().size()-1 || opcaoCarta2 < 0 )
 				{
 					System.out.println("\nOpção inválida! Digite um número de uma carta conforme a lista.\n");
-				}
+				}				
 				else
 				{
-					deckAdd( deckJogador(jogadorNumber), opcaoCarta);
-					count++;
-				}
-				// EXIBE DECK QUE ESTÁ SENDO MONTADO
-				deckList( deckJogador(jogadorNumber) );					
-			}			
-		}
-	}
-	
-	
-	private void deckAdd( List<Carta> deck, int cartaNumber)
-	{
-		deck.add( this.Cartas.get(cartaNumber) );		
-	}
-	
-	
-	private void preencherDeckRandom( List<Carta> deck )
-	{
-		int Carta_sorteada = 0;
-		int count = 1;
-		
-		for (count=1; count<4; count++)
-		{
-			// De 1 até 12
-			Carta_sorteada = rand.nextInt(12);
-			
-			deck.add( this.Cartas.get(Carta_sorteada) );
-		}		
-	}
-	
-	
-	private void deckList(List<Carta> deck)
-	{
-		// Valida o tamanho para não mostrar enquanto não tiver cartas
-		if (deck.size() > 0)
-		{
-			System.out.println("\nCartas no Deck:");
-			
-			int CartaCount = 1;
-			
-			for(Carta carta: deck)
-		    {
-				System.out.println(CartaCount++ + " - " + carta.retornarNome() );
-		    }
-		}
-	}
-	
-	
-	private List<Carta> deckJogador (int jogadorNumber)
-	{
-		if (jogadorNumber == 1)
-		{
-			return this.Deck1;
-		}
-		else
-		{
-			return this.Deck2;
-		}
-	}
-	
-	
-	public void exibirDeck(int DeckNumber)
-	{
-		if(DeckNumber == 1)
-		{
-			deckStatus(this.Deck1);
-		}
-		
-		if(DeckNumber == 2)
-		{
-			deckStatus(this.Deck2);
-		}
-	}
-	
-	
-	private void deckStatus(List<Carta> deck)
-	{
-		System.out.println("");
-		System.out.println("Deck:");
-		
-		int CartaCount = 1;
-		
-		for(Carta carta: deck)
-	    {
-			System.out.println("Carta " + CartaCount++ + ":");
-	        System.out.println( carta.retornarStatus());
-	        System.out.println("");
-	    }
-	}
-	
-	
-	public void controleBatalha(Jogador p1, Jogador p2)
-	{
-		boolean OcorreuBatalha = false;
-		for(Carta carta1: this.Deck1)
-	    {
-			if( carta1.retornarVida() > 0)
-			{
-				for(Carta carta2: this.Deck2)
-			    {
-					if( carta2.retornarVida() > 0)
+					card2 = this.deck2.retornarDeck().get(opcaoCarta2);
+					System.out.println("Carta escolhida: " + card2.retornarNome() + "\n" );
+					
+					resultadoBatalha = this.batalhar( card1, card2 );
+					
+					if ( resultadoBatalha == 1 )
 					{
-						batalhar(carta1, carta2, p1, p2);
-						OcorreuBatalha = true;
-						this.QuemBatalhou = carta1.retornarNome() + "(" + p1.retornarNome() + ")" +  " VS " + carta2.retornarNome() + "(" + p2.retornarNome() + ")"; 
-						break;
+						this.deck2.retornarDeck().remove(opcaoCarta2);
 					}
+					
+					if ( resultadoBatalha == 2 )
+					{
+						this.deck1.retornarDeck().remove(opcaoCarta1);
+					}
+				}
+			}
+		}
+		
+		
+		// Exibir vencedor
+		
+		System.out.println("Fim de Jogo!! \n" );
+		
+		// Se vencedor foi jogador do deck 1
+		if ( this.deck1.retornarDeck().size() > 0 )
+		{
+			System.out.println("Vencedor do jogo: " + this.deck1.retornarPlayer().retornarNome() );
+		}
+		
+		// Se vencedor foi jogador do deck 2
+		if ( this.deck2.retornarDeck().size() > 0 )
+		{
+			System.out.println("Vencedor do jogo: " + this.deck2.retornarPlayer().retornarNome() );
+		}		
+		
+	}
+	
+	
+	private int batalhar( Carta card1, Carta card2 )
+	{
+		// 0 até 1
+		int vez = rand.nextInt( 2 ) + 1;
+		
+		int ataque = 0;
+		int defesa = 0;
+		int dano = 0;
+		int retorno = 0;
+		
+		System.out.println( "\nIniciando batalha entre: \n" + card1.retornarNome() + " X " + card2.retornarNome() + "\n" );
+		
+		while ( card1.retornarVida() > 0 && card2.retornarVida() > 0 )
+		{
+			System.out.println( card1.retornarStatus() + "\n" );
+			System.out.println( card2.retornarStatus() + "\n" );
+			
+			if ( vez == 1 )
+			{
+				vez = 2;
+
+				// Card 1 ataca
+				ataque = this.calcularAtaque( card1, card2 );
+				
+				
+				// Card 2 defende
+				defesa = this.calcularDefesa( card1, card2 );
+				
+				dano = ataque - defesa;
+				if ( dano < 0 )
+				{
+					dano = 1;
+				}
+				
+				card2.receberDano(dano);
+				System.out.println(card2.retornarNome() + " recebeu " + dano + " de dano!" );
+				
+			}
+			else
+			{
+				vez = 1;
+				
+				// Card 2 ataca
+				ataque = this.calcularAtaque( card2, card1 );
+				
+				// Card 1 Defende
+				ataque = this.calcularDefesa( card2, card1 );
+				
+				card1.receberDano(dano);
+				System.out.println(card1.retornarNome() + " recebeu " + dano + " de dano!" );				
+			}
+			
+			System.out.println("\nAperte qualquer tecla para continar...\n");
+			String partida = this.input.nextLine();
+		}
+		
+		
+		if ( card1.retornarVida() > 0 )	
+		{
+			retorno = 1;
+			System.out.println(card1.retornarNome() + " Venceu a batalha\n");
+		}
+		
+		if ( card2.retornarVida() > 0 )	
+		{
+			retorno = 2;
+			System.out.println(card2.retornarNome() + " Venceu a batalha");
+		}
+		
+		System.out.println("Final da batalha:\n");
+		
+		System.out.println( card1.retornarStatus() + "\n" );
+		System.out.println( card2.retornarStatus() + "\n" );		
+				
+		return retorno;
+	}
+	
+	
+	private int calcularAtaque( Carta card1, Carta card2 )
+	{
+		int ataqueSorteado = 0;
+		int ataqueCarta = 0;
+		int ataqueEfeito = 0;
+		int ataqueTotal = 0;
+		
+		// 0 até 20
+		ataqueSorteado = rand.nextInt(21);		
+		
+		// Card ataca
+		System.out.println(card1.retornarNome() + " Ataca!" );
+		System.out.println(card1.retornarDesc() + "\n" );
+		
+		System.out.println("Composição do ataque:" );
+		
+		
+		// Ataque Sorteado
+		System.out.println("Sorteado na vez de ataque: " + ataqueSorteado );
+		ataqueTotal = ataqueTotal + ataqueSorteado;
+		
+		
+		
+		
+		// Ataque da carta
+		ataqueCarta = card1.retornarAtaque();
+		
+		// Checando de tipos das cartas são iguais
+		if ( card1.retornarTipo() == card2.retornarTipo() )
+		{
+			ataqueCarta--;
+			System.out.println("\nTipos das cartas são iguais, \npor isso o ataque da carta \n foi diminuido por 1!" );
+		}
+		
+		// Checando fraqueza
+		if ( card1.retornarTipo().name() == card2.retornarTipo().fraqueza.name() )
+		{
+			ataqueCarta++;
+			System.out.println("\nCarta atacante tem vantagem de tipo, \npor isso o ataque da carta \n foi aumentado por 1!" );
+		}
+		
+		// Checando se tipo carta é igual aos efeitos de defesas da carta 2
+		for( Efeito efeito: card2.retornarListaEfeitos() )
+	    {
+			if ( efeito.retornarTipoEfeito() == TipoEfeito.DEFESA && card1.retornarTipo() == efeito.retornarTipo()  )
+			{
+				ataqueCarta--;
+				System.out.println("\nTipo da carta atacante é igual ao efeito de defesa: \n" + efeito.retornarNome()  + ", por isso o ataque da carta \n foi diminuido por 1!" );
+			}
+	    }				
+		
+		System.out.println("	+ Ataque da carta: " + ataqueCarta );
+		ataqueTotal = ataqueTotal + ataqueCarta;
+		
+		
+		
+		// Ataque dos efeitos de ataque
+		for( Efeito efeito: card1.retornarListaEfeitos() )
+	    {
+			if ( efeito.retornarTipoEfeito() == TipoEfeito.ATAQUE )
+			{
+				ataqueEfeito = efeito.retornarValor();
+				
+				// Checando de tipos da arma e card2 são iguais
+				if ( efeito.retornarTipo() == card2.retornarTipo() )
+				{
+					ataqueEfeito--;
+					System.out.println("\nTipo do efeito " + efeito.retornarNome() + "\n é do mesmo tipo da carta que se defende! \nPor isso o ataque do efeito \n foi diminuido por 1!" );
+				}
+				
+				// Efeito de ataque tem vantegem sobre a carta que se defende
+				if ( efeito.retornarTipo().name() == card2.retornarTipo().fraqueza.name() )
+				{
+					ataqueEfeito++;
+					System.out.println("\nTipo do efeito " + efeito.retornarNome() + "\n tem vantagem sobre a carta que se defende \nPor isso o ataque do efeito \n foi aumentado por 1!" );
+				}							
+				
+				
+				// Checando se tipos de arma e armadura são iguais
+				for( Efeito efeitoCard2: card2.retornarListaEfeitos() )
+			    {
+					// Tipo igual de efeito de ataque ao de defesa
+					if ( efeitoCard2.retornarTipoEfeito() == TipoEfeito.DEFESA && efeito.retornarTipo() == efeitoCard2.retornarTipo()  )
+					{
+						ataqueEfeito--;
+						System.out.println("\nTipo do efeito " + efeito.retornarNome() + "\n é do mesmo tipo do efeito de defesa: " + efeitoCard2.retornarNome() +   " da carta que se defende \nPor isso o ataque do efeito \n foi diminuido por 1!" );
+					}						
 			    }	
-				break;
+				
+				System.out.println("	+ Efeito " + efeito.retornarNome() + ": " + ataqueEfeito );
+				ataqueTotal = ataqueTotal + ataqueEfeito;
 			}
 	    }
 		
-		
-		this.JogoON = OcorreuBatalha;
-	}
-	
-	
-	public boolean jogoContinua()
-	{
-		return this.JogoON;
-	}
-	
-	
-	public void quemBatalhouNaPartida()
-	{
-		System.out.println( this.QuemBatalhou );
-	}
-	
-	
-	public void continuarJogo()
-	{
-		if ( !this.jogoAuto )
+		if( ataqueTotal < 0 )
 		{
-			System.out.println("\nAperte qualquer tecla para continar...");
-			String partida = this.input.nextLine();				
+			ataqueTotal = 1;
 		}
+		System.out.println("\nValor total do ataque: " + ataqueTotal + "\n");
+		
+		return ataqueTotal;
 	}
 	
 	
+	private int calcularDefesa( Carta card1, Carta card2 )  
+	{
+		int defesaSorteada = 0;
+		int defesaCarta = 0;
+		int defesaEfeito = 0;
+		int defesaTotal = 0;
+		
+		// 0 até 10
+		defesaSorteada = rand.nextInt(11);		
+		
+		System.out.println(card2.retornarNome() + " Defende!" );
+		System.out.println(card2.retornarDesc() + "\n" );
+		
+		System.out.println("Composição da defesa:" );
+		
+		
+		// Sorteado
+		System.out.println("Sorteado na vez de defender: " + defesaSorteada );
+		defesaTotal = defesaTotal + defesaSorteada;
+		
+		// Defesa da carta
+		defesaCarta = card2.retornarDefesa();	
+		
+		System.out.println("	+ Defesa da carta: " + defesaCarta );
+		defesaTotal = defesaTotal + defesaCarta;
+		
+		
+		// Defesa dos efeitos de defesa
+		for( Efeito efeito: card2.retornarListaEfeitos() )
+	    {
+			if ( efeito.retornarTipoEfeito() == TipoEfeito.DEFESA )
+			{
+				defesaEfeito = efeito.retornarValor();
+			
+				System.out.println("	+ Efeito " + efeito.retornarNome() + ": " + defesaEfeito );
+				defesaTotal = defesaTotal + defesaEfeito;
+			}
+	    }	
+		
+		if( defesaTotal < 0 )
+		{
+			defesaTotal = 1;
+		}				
+		System.out.println("\nValor total da Defesa: " + defesaTotal + "\n" );	
+		
+		return defesaTotal;
+		
+	}
 }

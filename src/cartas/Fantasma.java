@@ -1,13 +1,12 @@
 package cartas;
 
-public class Fantasma extends Carta
+import Jogo.Tipo;
+
+public class Fantasma extends Ritual
 {
 	// Construtor
-	public Fantasma (String nome, int vida)
+	public Fantasma ( String nome, int vida, int ataque, int defesa, Tipo tipo, int curseValor  )
 	{
-		super(nome,vida);
-		
-		aplicarEfeito("Diamante", 7, 2);
+		super(nome ,vida, ataque, defesa, tipo, curseValor);
 	}		
-
 }

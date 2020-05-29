@@ -1,14 +1,14 @@
 package cartas;
-import Jogo.ISkill;
 
-// Entidade - SUBCLASSE
-public class Arqueiro extends Carta implements ISkill 
+import Jogo.Tipo;
+
+public class Arqueiro extends Fusao implements IDesviar 
 {
 	
 	// Construtor
-	public Arqueiro (String nome, int vida)
+	public Arqueiro (String nome, int vida, int ataque, int defesa, Tipo tipo)
 	{
-		super(nome,vida);
+		super(nome ,vida, ataque, defesa, tipo);
 	}
 	
 	@Override
@@ -17,17 +17,20 @@ public class Arqueiro extends Carta implements ISkill
 		if (!desviar())
 		{
 			super.receberDano(dano);
-			super.setarDesvio(false);
+			System.out.println(this.retornarNome() + " Falhou em desviar!");
 		}
 		else
 		{
-			super.setarDesvio(true);
+			System.out.println(this.retornarNome() + " Desviou do ataque! e Portanto não recebeu o dano abaixo!");
 		}
 	}	
 	
-//	@Override
-//	public boolean desviar() {
-//		return ISkill.super.desviar();
-//	}	
+	// Método obrigado a implementar por conta da interface
+	public boolean desviar() 
+	{
+		int chance = rand.nextInt(3) + 1;
+		
+		return chance == 2;
+	}
 	
 }

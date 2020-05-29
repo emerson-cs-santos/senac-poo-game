@@ -1,13 +1,12 @@
 package cartas;
 
-public class Esqueleto extends Carta
+import Jogo.Tipo;
+
+public class Esqueleto extends Ritual
 {
 	// Construtor
-	public Esqueleto (String nome, int vida)
+	public Esqueleto ( String nome, int vida, int ataque, int defesa, Tipo tipo, int curseValor )
 	{	
-		super(nome,vida);
-		
-		aplicarEfeito("Escudo", 4, 1);
+		super(nome ,vida, ataque, defesa, tipo, curseValor);
 	}		
-
 }

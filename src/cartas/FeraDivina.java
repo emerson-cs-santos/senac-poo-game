@@ -1,10 +1,12 @@
 package cartas;
 
-public class FeraDivina extends Carta
+import Jogo.Tipo;
+
+public class FeraDivina extends Fusao
 {
-	public FeraDivina (String nome, int vida)
+	public FeraDivina ( String nome, int vida, int ataque, int defesa, Tipo tipo )
 	{	
-		super(nome,vida);
+		super(nome ,vida, ataque, defesa, tipo);
 	}	
 
 }
